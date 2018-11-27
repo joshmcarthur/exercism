@@ -7,15 +7,15 @@ defmodule Words do
   @spec count(String.t()) :: map
   def count(sentence) do
     word_matcher = ~r/((?:\p{L}|-|[0-9])+)/iu
-    words = Regex.scan(word_matcher ,sentence, capture: :all_but_first) 
-            |> List.flatten 
-    count_words(words)
+    sentence = String.downcase(sentence)
+    Regex.scan(word_matcher, sentence, capture: :all_but_first) 
+      |> List.flatten 
+      |> count_words
   end
 
   defp count_words(words, counts \\ %{}) 
 
   defp count_words([word | words], counts) do
-    word = String.downcase(word)
     counts = Map.update(counts, word, 1, &(&1 + 1))
     count_words(words, counts)
   end
